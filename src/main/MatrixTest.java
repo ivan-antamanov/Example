@@ -16,12 +16,12 @@ public class MatrixTest {
     public static void main(String[] args) {
         MatrixTest matrixTest = new MatrixTest();
 
-        matrixTest.matrix1 = MatrixUtility.createMatrix(5, 5);
-        matrixTest.matrix2 = MatrixUtility.createMatrix(5, 5);
+        matrixTest.matrix1 = MatrixUtility.createMatrix(5, 8);
+        matrixTest.matrix2 = MatrixUtility.createMatrix(3, 5);
         try {
             matrixTest.matrix3 = MatrixUtility.multiplicationMatrix(matrixTest.matrix1, matrixTest.matrix2);
-            matrixTest.matrix4 = MatrixUtility.sumOfMatrix(matrixTest.matrix1, matrixTest.matrix2);
             MatrixUtility.transposeMatrix(matrixTest.matrix3);
+            matrixTest.matrix4 = MatrixUtility.sumOfMatrix(matrixTest.matrix1, matrixTest.matrix2);
         } catch (WrongMultiplicationMatrixException | WrongSumMatrixException ex1) {
             ex1.printStackTrace();
         }
