@@ -1,21 +1,21 @@
 package main;
 
+import main.MatrixExceptions.WrongMultiplicationMatrixException;
+import main.MatrixExceptions.WrongSumMatrixException;
+
 /**
  * Created by iantaman on 17.10.2015.
  */
-public class Matrix {
-    int[][] matrix1;
-    int[][] matrix2;
-    int[][] matrix3;
-    //matrix3 = matrix1*/+ matrix2
+public class MatrixUtility {
+
     private static final String delimiter = "*****";
 
-    int[][] createMatrix(int rowNumbers, int column) {
-        System.out.println("New matrix");
+    public static int[][] createMatrix(int rowNumbers, int column) {
+        System.out.println("New matrix:");
         int[][] matrix = new int[rowNumbers][column];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = (int) ((Math.random() * 10));
+                matrix[i][j] = new Double(Math.random()*10).intValue();
                 System.out.print(matrix[i][j] + " ");
             }
             System.out.print("\n");
@@ -24,9 +24,9 @@ public class Matrix {
         return matrix;
     }
 
-    public void multiplicationMatrix(int[][] matrix1, int[][] matrix2) {
-
-        System.out.println("Multiplication matrix");
+    public static int[][] multiplicationMatrix(int[][] matrix1, int[][] matrix2) throws WrongMultiplicationMatrixException {
+        System.out.println("Multiplication matrix:");
+        int[][] matrix3;
         if (matrix1 != null && matrix2 != null && matrix1.length == matrix2[0].length) {
             matrix3 = new int[matrix1.length][matrix2[0].length];
             for (int i = 0; i < matrix1.length; i++) {
@@ -39,19 +39,14 @@ public class Matrix {
                 System.out.println();
             }
             System.out.println(delimiter);
-        } else {
-            System.out.println("Matrix must be defined!\n" +
-                    "Row numbers of first matrix have to equally column numbers of second matrix");
-            System.out.println(delimiter);
-        }
-
+            return matrix3;
+        } else throw new WrongMultiplicationMatrixException();
 
     }
 
-
-    public void summaryOfMatrix(int[][] matrix1, int[][] matrix2) {
-        System.out.println("Summary of matrix");
-
+    public static int[][] sumOfMatrix(int[][] matrix1, int[][] matrix2) throws WrongSumMatrixException {
+        System.out.println("Summary of matrix:");
+        int[][] matrix3;
         if (matrix1 != null && matrix2 != null && matrix1.length == matrix2.length && matrix1[0].length == matrix2[0].length) {
             matrix3 = new int[matrix1.length][matrix1[0].length];
             for (int i = 0; i < matrix3.length; i++) {
@@ -62,48 +57,34 @@ public class Matrix {
                 System.out.println();
             }
             System.out.println(delimiter);
-        } else {
-            System.out.println("Matrix must be defined!\n" +
-                    "Size of first matrix have to equally size of second matrix");
-            System.out.println(delimiter);
-        }
+            return matrix3;
+        } else throw new WrongSumMatrixException();
 
     }
 
 
-    public int[][] transposeMatrix(int[][] matrix) {
-        System.out.println("Transpose matrix");
+    public static int[][] transposeMatrix(int[][] matrix) {
+        System.out.println("Transpose matrix:");
         int[][] transposedMatrix = new int[matrix[0].length][matrix.length];
         for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
+            for (int j = 0; j < matrix[0].length; j++) {
                 transposedMatrix[j][i] = matrix[i][j];
-
             }
         }
-        arrayToString(transposedMatrix);
+        matrixToString(transposedMatrix);
         System.out.println();
-        System.out.println(delimiter);
         return transposedMatrix;
     }
 
-    public void arrayToString(int[][] matrix) {
+    public static void matrixToString(int[][] matrix) {
         for (int[] aMatrix : matrix) {
             for (int anAMatrix : aMatrix) {
                 System.out.print(anAMatrix + " ");
             }
             System.out.println();
         }
-        System.out.println(delimiter);
+        System.out.print(delimiter);
     }
 
-    public static void main(String[] args) {
-        Matrix arrays = new Matrix();
-
-        arrays.matrix1 = arrays.createMatrix(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-        arrays.matrix2 = arrays.createMatrix(Integer.parseInt(args[2]),Integer.parseInt(args[3]));
-        arrays.multiplicationMatrix(arrays.matrix1, arrays.matrix2);
-        arrays.summaryOfMatrix(arrays.matrix1, arrays.matrix2);
-        arrays.transposeMatrix(arrays.matrix1);
-    }
 
 }
