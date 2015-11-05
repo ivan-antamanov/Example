@@ -1,4 +1,4 @@
-package main.java.AnnotationTest;
+package AnnotationTest;
 
 /**
  * Created by iantaman on 03.11.2015.
