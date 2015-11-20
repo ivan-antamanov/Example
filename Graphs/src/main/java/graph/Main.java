@@ -1,14 +1,18 @@
 package graph;
 
+//import graph.conf.BOConfiguration;
 import graph.bo.BusinessObject;
-import graph.dao.DaoObject;
+import graph.conf.BOConfiguration;
+import graph.conf.DaoConfig;
+import graph.conf.DataSourceConfiguration;
 import graph.dao.impl.DaoObjectImpl;
 //import graph.dao.impl.NodeDataDaoImpl;
-import graph.domain.DBfactory;
-import graph.domain.Graph;
-import graph.domain.NodeData;
-import graph.domain.NodeReference;
+import graph.domain.*;
+import graph.web.GraphController;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.logging.Logger;
@@ -16,6 +20,7 @@ import java.util.logging.Logger;
 /**
  * Created by iantaman on 09.11.2015.
  */
+@SpringBootApplication
 public class Main {
 
     private ApplicationContext context;
@@ -24,9 +29,11 @@ public class Main {
     private Logger logger = Logger.getLogger(Main.class.getName());
 
     public Main() {
-        context = new ClassPathXmlApplicationContext("Spring-Datasource.xml");
-        dBfactory = (DBfactory) context.getBean("dBfactory");
-        businessObject = new BusinessObject(new DaoObjectImpl());
+//        context = new ClassPathXmlApplicationContext("Spring-Datasource.xml");
+        context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class, DaoConfig.class);
+        dBfactory = context.getBean(DBfactory.class);
+        GraphController graphController = context.getBean(GraphController.class);
+//        graphController.setBusinessObject(businessObject);
     }
 
     public Main(String configLocation, String beanId) {
@@ -51,15 +58,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ApplicationContext context =
-                new ClassPathXmlApplicationContext("Spring-Datasource.xml");
-
-        DBfactory dBfactory = (DBfactory) context.getBean("dBfactory");
-
-        DaoObjectImpl daoObject = new DaoObjectImpl();
-
-        BusinessObject businessObject = new BusinessObject(daoObject);
-
+        SpringApplication.run(Main.class, args);
 
     }
 }

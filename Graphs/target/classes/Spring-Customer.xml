@@ -3,12 +3,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <bean id="customerService" class="Tests.spring_aop.CustomerService">
+    <bean id="customerService" class="Tests.spring_test.spring_aop.CustomerService">
         <property name="name" value="Ivan" />
         <property name="url" value="http://www.mera.ru" />
     </bean>
 
-    <bean id="AroundMethodBean" class="Tests.spring_aop.AroundMethod" />
+    <bean id="AroundMethodBean" class="Tests.spring_test.spring_aop.AroundMethod" />
 
     <bean id="customerServiceProxy"
           class="org.springframework.aop.framework.ProxyFactoryBean">

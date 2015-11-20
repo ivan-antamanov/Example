@@ -9,9 +9,9 @@ import java.sql.SQLException;
 /**
  * Created by iantaman on 10.11.2015.
  */
-public class GraphRowMapper implements RowMapper {
+public class GraphRowMapper implements RowMapper<Graph> {
     @Override
-    public Object mapRow(ResultSet resultSet, int i) throws SQLException {
+    public Graph mapRow(ResultSet resultSet, int i) throws SQLException {
         Graph graph = new Graph();
         graph.setId(resultSet.getInt("id"));
         graph.setName(resultSet.getString("name"));

@@ -1,13 +1,16 @@
 package graph.bo;
 
 import graph.dao.impl.DaoObjectImpl;
+import graph.domain.DBfactory;
 import graph.domain.Graph;
 import graph.domain.NodeData;
 import graph.domain.NodeReference;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -20,6 +23,11 @@ public class BusinessObject {
 
     public BusinessObject(DaoObjectImpl daoObject) {
         this.daoObject = daoObject;
+    }
+
+    public List<Graph> listAllGraph(){
+        logger.info("Try to get list of graphs");
+        return daoObject.allListGraph();
     }
 
     public Graph createGraph(String nameOfGraph) throws NullPointerException {

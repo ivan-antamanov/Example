@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -20,6 +21,13 @@ import java.util.logging.Logger;
 public class DaoObjectImpl implements DaoObject {
 
     Logger logger = Logger.getLogger(DaoObject.class.getName());
+
+    public List<Graph> allListGraph() {
+        String sql = "SELECT * FROM my_schema.graphs";
+        List<Graph> listOfGraphs = DBfactory.getJdbcTemplate().query(sql, new GraphRowMapper());
+        logger.info("Graph list has been read");
+        return listOfGraphs;
+    }
 
     public boolean isGraphExist(String graphsName) {
         String sql = "SELECT count(*) FROM my_schema.graphs WHERE name = ?";
@@ -51,6 +59,7 @@ public class DaoObjectImpl implements DaoObject {
         DBfactory.getJdbcTemplate().
                 update("UPDATE my_schema.graphs SET name = ?, update_time = ? WHERE name = ?",
                         newName, new Date(), initialName);
+
         logger.info("Graph has been successful updated: " + newName + "has renamed to" + initialName);
     }
 
