@@ -1,16 +1,12 @@
 package graph.bo;
 
 import graph.dao.impl.DaoObjectImpl;
-import graph.domain.DBfactory;
 import graph.domain.Graph;
 import graph.domain.NodeData;
 import graph.domain.NodeReference;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -25,9 +21,12 @@ public class BusinessObject {
         this.daoObject = daoObject;
     }
 
-    public List<Graph> listAllGraph(){
+    public List<Graph> listAllGraph() {
         logger.info("Try to get list of graphs");
-        return daoObject.allListGraph();
+        if (daoObject.isAnyGraphExist()) {
+            return daoObject.allListGraph();
+        }
+        return null;
     }
 
     public Graph createGraph(String nameOfGraph) throws NullPointerException {
@@ -44,7 +43,7 @@ public class BusinessObject {
     }
 
     public Graph getGraphByName(String graphsName) {
-        logger.info("Try get Graph By Name");
+        logger.info("Try get Graph By Name: " + graphsName);
         if (daoObject.isGraphExist(graphsName)) {
             return daoObject.readGraph(graphsName);
         } else {
@@ -54,23 +53,34 @@ public class BusinessObject {
     }
 
     public void updateGraph(String initialName, String newName) {
-        logger.info("Try update Graph");
+        logger.info("Try update Graph: " + initialName);
         if (daoObject.isGraphExist(initialName)) {
             daoObject.updateGraph(initialName, newName);
         } else {
-            logger.warning("Not match graph with name " + initialName + " in table!");
+            logger.warning("Not match graph with name \"" + initialName + "\" in table!");
         }
     }
 
-    public void deleteGraph(String graphsName) {
+    public Graph deleteGraph(String graphsName) {
         logger.info("Try delete Graph By Name");
         if (daoObject.isGraphExist(graphsName)) {
             daoObject.deleteGraph(graphsName);
-        } else {
-            logger.warning("Not match graph with name " + graphsName + " in table!");
+            return new Graph();
         }
+        logger.warning("Not match graph with name " + graphsName + " in table!");
+        return null;
+
     }
 // graphs validation
+
+    public List<NodeData> getListNodesByGraph(String graphName) {
+        logger.info("Try get list of nodes in graph: " + graphName);
+        if (daoObject.isGraphExist(graphName)) {
+            return daoObject.getListNodes(graphName);
+        }
+        logger.warning("No match graph with name: " + graphName);
+        return null;
+    }
 
     public NodeData createNode(String nodesName) {
         logger.info("Try create Node By Name");
@@ -111,18 +121,20 @@ public class BusinessObject {
         }
     }
 
-    public void deleteNode(String nodeName) {
+    public NodeData deleteNode(String nodeName) {
         logger.info("Try delete Node By Name");
 
         try {
             if (daoObject.isNodeExist(nodeName)) {
                 daoObject.deleteNodeData(nodeName);
+                return new NodeData();
             } else {
                 logger.warning("Not match node with name " + nodeName + " in table!");
             }
         } catch (DataIntegrityViolationException e) {
             logger.warning("You have tried to delete which have a link. At first you must delete all link on this node");
         }
+        return null;
     }
 // nodes validation
 
@@ -132,8 +144,8 @@ public class BusinessObject {
                 !daoObject.isReferenceExist(nodeSourceId, nodeTargetId)) {
             return daoObject.createNodeReference(nodeSourceId, nodeTargetId);
         }
-            logger.warning("Table \"Node_Reference\" has already node with same reference " + nodeSourceId + "-->" +
-                    nodeTargetId + " Or node to refer to itself. All references have to be unique");
+        logger.warning("Table \"Node_Reference\" has already node with same reference " + nodeSourceId + "-->" +
+                nodeTargetId + " Or node to refer to itself. All references have to be unique");
 
 
         return null;

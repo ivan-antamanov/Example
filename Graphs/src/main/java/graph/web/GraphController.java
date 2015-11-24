@@ -2,7 +2,7 @@ package graph.web;
 
 import graph.bo.BusinessObject;
 import graph.domain.Graph;
-import graph.web.controller.GraphURLConstants;
+import graph.web.urlConstants.URLConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,35 +25,46 @@ public class GraphController {
         this.businessObject = businessObject;
     }
 
-    @RequestMapping(value = GraphURLConstants.GET_LIST_GRAPH, method = RequestMethod.GET)
-    public List<Graph> listAllGrapg() {
+    @RequestMapping(value = URLConstants.CREATE_GRAPH, method = RequestMethod.POST)
+    public Graph createGraph(@RequestBody String name) {
+        logger.info("Creating graph in WEB with name: " + name);
+        Graph graph = businessObject.createGraph(name);
+        return graph;
+
+    }
+
+    @RequestMapping(value = URLConstants.GET_GRAPH_LIST, method = RequestMethod.GET)
+    public List<Graph> getlistGraphs() {
         return businessObject.listAllGraph();
     }
 
 
-    @RequestMapping(value = GraphURLConstants.GET_GRAPH, method = RequestMethod.GET)
+    @RequestMapping(value = URLConstants.GET_GRAPH, method = RequestMethod.GET)
     public Graph getGrahp(@PathVariable("name") String name) {
         logger.info("Start getGrahp()");
         Graph graph = businessObject.getGraphByName(name);
         if (graph != null) {
             return graph;
         }
-        logger.warning("Graph with name: " + name + " not found");
+        logger.warning("Graph in WEB with name: " + name + " not found");
         return new Graph();
     }
 
-    @RequestMapping(value = GraphURLConstants.CREATE_GRAPH, method = RequestMethod.POST)
-    public Graph createGraph(@RequestBody String name) {
-        logger.info("Creating graph with name: " + name);
-        Graph graph = businessObject.createGraph(name);
-        return graph;
+    @RequestMapping(value = URLConstants.UPDATE_GRAPH, method = RequestMethod.PUT)
+    public Graph updateGraph(@PathVariable("initialName") String initialName, @RequestBody String newName) {
+        logger.info("Updating graph in WEB with old name: " + initialName + " to new name: " + newName);
+        businessObject.updateGraph(initialName, newName);
+        return businessObject.getGraphByName(newName);
 
     }
 
-    @RequestMapping(value = GraphURLConstants.UPDATE_GRAPH, method = RequestMethod.PUT)
-    public Graph updateGraph(@PathVariable String initialName, String newName){
-        logger.info("Updating graph with old name: " + initialName + " to new name: "+ newName);
-        businessObject.updateGraph(initialName, newName);
-return null;
+    @RequestMapping(value = URLConstants.DELETE_GRAPH, method = RequestMethod.DELETE)
+    public Graph deleteGraph(@PathVariable String name){
+        logger.info("Delete graph in WEB");
+         if( businessObject.deleteGraph(name) !=null){
+             return new Graph();
+         }
+        logger.warning("Can't delete graph: "+name);
+        return null;
     }
 }

@@ -30,9 +30,9 @@ public class Main {
 
     public Main() {
 //        context = new ClassPathXmlApplicationContext("Spring-Datasource.xml");
-        context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class, DaoConfig.class);
-        dBfactory = context.getBean(DBfactory.class);
-        GraphController graphController = context.getBean(GraphController.class);
+//        context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class, DaoConfig.class);
+//        dBfactory = context.getBean(DBfactory.class);
+//        GraphController graphController = context.getBean(GraphController.class);
 //        graphController.setBusinessObject(businessObject);
     }
 

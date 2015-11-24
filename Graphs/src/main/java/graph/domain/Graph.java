@@ -1,5 +1,10 @@
 package graph.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+
 import java.util.Date;
 
 /**
@@ -9,7 +14,10 @@ public class Graph {
 
     private Integer id;
     private String name;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Date creatingDate;
+//    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private Date updatingDate;
 
     public Graph() {
@@ -25,11 +33,12 @@ public class Graph {
     public String toString() {
         return "id = " + id + "\n" + "name = " + name + "\n" + "creatingDate = " + creatingDate + "\n" + "updatingDate = " + updatingDate;
     }
-
+    @JsonSerialize(using = DateSerializer.class)
     public Date getCreatingDate() {
         return creatingDate;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
     public void setCreatingDate(Date creatingDate) {
         this.creatingDate = creatingDate;
     }
@@ -54,6 +63,7 @@ public class Graph {
         return updatingDate;
     }
 
+//    @JsonSerialize(using = DateSerializer.class)
     public void setUpdatingDate(Date updatingDate) {
         this.updatingDate = updatingDate;
     }

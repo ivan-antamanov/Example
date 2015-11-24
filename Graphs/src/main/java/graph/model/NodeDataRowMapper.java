@@ -9,10 +9,10 @@ import java.sql.SQLException;
 /**
  * Created by iantaman on 10.11.2015.
  */
-public class NodeDataRowMapper implements RowMapper {
+public class NodeDataRowMapper implements RowMapper<NodeData> {
 
     @Override
-    public Object mapRow(ResultSet resultSet, int i) throws SQLException {
+    public NodeData mapRow(ResultSet resultSet, int i) throws SQLException {
         NodeData nodeData = new NodeData();
         nodeData.setId(resultSet.getInt("id"));
         nodeData.setName(resultSet.getString("name"));
@@ -20,6 +20,6 @@ public class NodeDataRowMapper implements RowMapper {
         nodeData.setUpdatingDate(resultSet.getDate("update_time"));
         nodeData.setGraphId(resultSet.getInt("graphs_id"));
 
-        return null;
+        return nodeData;
     }
 }

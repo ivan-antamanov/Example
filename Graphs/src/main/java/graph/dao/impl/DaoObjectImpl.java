@@ -23,10 +23,18 @@ public class DaoObjectImpl implements DaoObject {
     Logger logger = Logger.getLogger(DaoObject.class.getName());
 
     public List<Graph> allListGraph() {
+
         String sql = "SELECT * FROM my_schema.graphs";
         List<Graph> listOfGraphs = DBfactory.getJdbcTemplate().query(sql, new GraphRowMapper());
         logger.info("Graph list has been read");
         return listOfGraphs;
+    }
+
+    public boolean isAnyGraphExist(){
+        String sql = "SELECT count(*) FROM my_schema.graphs";
+        int count = DBfactory.getJdbcTemplate().queryForObject(sql, Integer.class);
+
+        return count>0;
     }
 
     public boolean isGraphExist(String graphsName) {
@@ -55,11 +63,10 @@ public class DaoObjectImpl implements DaoObject {
     }
 
     @Override
-    public void updateGraph(String newName, String initialName) {
+    public void updateGraph(String initialName, String newName) {
         DBfactory.getJdbcTemplate().
                 update("UPDATE my_schema.graphs SET name = ?, update_time = ? WHERE name = ?",
                         newName, new Date(), initialName);
-
         logger.info("Graph has been successful updated: " + newName + "has renamed to" + initialName);
     }
 
@@ -84,6 +91,13 @@ public class DaoObjectImpl implements DaoObject {
         int count = DBfactory.getJdbcTemplate().queryForObject(sql, new Object[]{nodesName}, Integer.class);
 
         return count > 0;
+    }
+
+    public List<NodeData> getListNodes(String graphName) {
+        String sql = "SELECT * FROM my_schema.node_data WHERE graphs_id IN (SELECT id FROM my_schema.graphs WHERE name =?)";
+        List<NodeData> nodeDataList = DBfactory.getJdbcTemplate().query(sql, new Object[]{graphName}, new NodeDataRowMapper());
+        logger.info("List of Nodes in Graph: " + graphName + " has been read");
+        return nodeDataList;
     }
 
     @Override
