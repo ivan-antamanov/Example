@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BOConfiguration {
 
-    @Autowired
-    public DaoObjectImpl daoObjectImpl;
+//    @Autowired
+//    public DaoObjectImpl daoObjectImpl;
 
     @Bean
     public BusinessObject businessObject(DaoObjectImpl daoObject){

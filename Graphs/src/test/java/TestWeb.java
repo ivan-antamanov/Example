@@ -16,6 +16,7 @@ public class TestWeb {
         String initailName = "TestGraph";
         String newName = "GraphTest";
         restTemplate.put(SERVER_URL +URLConstants.UPDATE_GRAPH, newName, "New");
+//        restTemplate.put(SERVER_URL+URLConstants.UPDATE_NODE, );
 
 
     }
